@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game TTS Interaktif</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧩 Teka-Teki Silang</h1>
+            <div class="game-info">
+                <p>Skor: <span id="score">0</span></p>
+                <p>Waktu: <span id="timer">00:00</span></p>
+            </div>
+        </header>
+
+        <div class="game-layout">
+            <div class="puzzle-wrapper">
+                <div id="crossword-board" class="board"></div>
+            </div>
+
+            <div class="sidebar">
+                <div class="clues-section">
+                    <h2>Mendatar</h2>
+                    <ul id="clues-across"></ul>
+                </div>
+                <div class="clues-section">
+                    <h2>Menurun</h2>
+                    <ul id="clues-down"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="check-btn" class="btn">Periksa Jawaban</button>
+            <button id="reset-btn" class="btn btn-secondary">Ulangi Game</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
