@@ -121,8 +121,8 @@ const cluesData = {
 };
 
 const grid = document.getElementById('grid');
-const cluesAcross = document.getElementById('clues-across');
-const cluesDown = document.getElementById('clues-down');
+const cluesAcrossE1 = document.getElementById('clues-across');
+const cluesDownE1 = document.getElementById('clues-down');
 const checkBtn = document.getElementById('check-btn');
 const resetBtn = document.getElementById('reset-btn');
 const size = cluesData.size;
@@ -169,17 +169,17 @@ function buildGrid() {
 }
 
 function buildClues() {
-  cluesAcross.innerHTML = '';
+  cluesAcrossE1.innerHTML = '';
   cluesData.across.forEach(c => {
     const li = document.createElement('li');
     li.textContent = `${c.num}. ${c.clue}`;
-    cluesAcross.appendChild(li);
+    cluesAcrossE1.appendChild(li);
   });
-  cluesDown.innerHTML = '';
+  cluesDownE1.innerHTML = '';
   cluesData.down.forEach(c => {
     const li = document.createElement('li');
     li.textContent = `${c.num}. ${c.clue}`;
-    cluesDown.appendChild(li);
+    cluesDownE1.appendChild(li);
   });
 }
 
