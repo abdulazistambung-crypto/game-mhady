@@ -106,3 +106,113 @@ resetBtn.addEventListener('click', () => {
 });
 
 window.onload = initGame;
+javascript// 1. DATA SOALNYA TARUH SINI DULU BOS. NANTI KITA PISAH KE soal.json
+const cluesData = {
+  size: 15, // Ukuran grid 15x15. Ganti 20 kalo mau gede
+  across: [
+    { num: 1, row: 0, col: 0, answer: "JAKARTA", clue: "Ibukota Indonesia" },
+    { num: 4, row: 2, col: 3, answer: "MANTAN", clue: "Bekas pacar" },
+    { num: 5, row: 4, col: 0, answer: "KELASMIN", clue: "Kelas paling atas" }
+  ],
+  down: [
+    { num: 2, row: 0, col: 0, answer: "JAMBU", clue: "Buah yang ada bijinya di luar" },
+    { num: 3, row: 0, col: 4, answer: "KERTAS", clue: "Tempat nulis" }
+  ]
+};
+
+const grid = document.getElementById('grid');
+const cluesAcross = document.getElementById('clues-across');
+const cluesDown = document.getElementById('clues-down');
+const checkBtn = document.getElementById('check-btn');
+const resetBtn = document.getElementById('reset-btn');
+const size = cluesData.size;
+
+function buildGrid() {
+  grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+  grid.innerHTML = '';
+  const numberMap = new Map();
+  
+  [...cluesData.across, ...cluesData.down].forEach(c => {
+    numberMap.set(`${c.row}-${c.col}`, c.num);
+  });
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const cellDiv = document.createElement('div');
+      cellDiv.classList.add('cell');
+      const key = `${r}-${c}`;
+      
+      let isUsed = false;
+      [...cluesData.across, ...cluesData.down].forEach(clue => {
+        if (r === clue.row && c >= clue.col && c < clue.col + clue.answer.length) isUsed = true;
+        if (c === clue.col && r >= clue.row && r < clue.row + clue.answer.length) isUsed = true;
+      });
+
+      if (isUsed) {
+        const input = document.createElement('input');
+        input.maxLength = 1;
+        input.dataset.row = r;
+        input.dataset.col = c;
+        cellDiv.appendChild(input);
+        if (numberMap.has(key)) {
+          const numSpan = document.createElement('span');
+          numSpan.classList.add('number');
+          numSpan.textContent = numberMap.get(key);
+          cellDiv.appendChild(numSpan);
+        }
+      } else {
+        cellDiv.classList.add('blocked');
+      }
+      grid.appendChild(cellDiv);
+    }
+  }
+}
+
+function buildClues() {
+  cluesAcross.innerHTML = '';
+  cluesData.across.forEach(c => {
+    const li = document.createElement('li');
+    li.textContent = `${c.num}. ${c.clue}`;
+    cluesAcross.appendChild(li);
+  });
+  cluesDown.innerHTML = '';
+  cluesData.down.forEach(c => {
+    const li = document.createElement('li');
+    li.textContent = `${c.num}. ${c.clue}`;
+    cluesDown.appendChild(li);
+  });
+}
+
+checkBtn.addEventListener('click', () => {
+  document.querySelectorAll('.cell input').forEach(input => {
+    const r = parseInt(input.dataset.row);
+    const c = parseInt(input.dataset.col);
+    let correctAnswer = '';
+    cluesData.across.forEach(clue => {
+      if (r === clue.row && c >= clue.col && c < clue.col + clue.answer.length) {
+        correctAnswer = clue.answer[c - clue.col];
+      }
+    });
+    cluesData.down.forEach(clue => {
+      if (c === clue.col && r >= clue.row && r < clue.row + clue.answer.length) {
+        correctAnswer = clue.answer[r - clue.row];
+      }
+    });
+    if (input.value.toUpperCase() === correctAnswer) {
+      input.style.backgroundColor = '#2ecc71'; // Hijau = bener
+    } else {
+      input.style.backgroundColor = '#e74c3c'; // Merah = salah
+    }
+  });
+});
+
+resetBtn.addEventListener('click', () => {
+  document.querySelectorAll('.cell input').forEach(input => {
+    input.value = '';
+    input.style.backgroundColor = '';
+  });
+});
+
+// Jalankan pertama kali
+buildGrid();
+buildClues();
