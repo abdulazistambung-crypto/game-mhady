@@ -1,218 +1,140 @@
+// === DATA TTS 15x15 MADRASAH ===
 const gridData = [
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"],
-    ["*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*", "*"]
+  ['#','#'],
+  ['#','1','.','2','.','#','3','.','#'],
+  ['#','.','#','.','#','.','#'],
+  ['#','4','.','5','.','6','#'],
+  ['#','#','7','#','.','#','8','#'],
+  ['#','9','.','10','.','11','#'],
+  ['#','.','#','.','#','.','#'],
+  ['#','12','.','13','.','#'],
+  ['#','#','14','#','#','#'],
+  ['#','15','.','16','.','#'],
+  ['#','.','#','17','#','.','#'],
+  ['#','18','.','19','.','20','.','#'],
+  ['#','#','21','#','22','#'],
+  ['#','23','.','24','#'],
+  ['#','#']
 ];
+const cluesAcross = {
+ 1: "Nama malaikat pencatat amal baik",
+ 4: "Nabi yang dibelah lautnya",
+ 6: "Kitab suci umat Islam",
+ 9: "Arah kiblat umat Islam",
+ 12: "Puasa bulan...",
+ 15: "Rukun Islam ke-2",
+ 18: "Tempat ibadah umat Islam",
+ 23: "Nabi terakhir"
+};
+const cluesDown = {
+ 2: "Malaikat pencabut nyawa",
+ 3: "Jumlah rakaat sholat Maghrib",
+ 5: "Hari raya umat Islam",
+ 7: "Bulan lahir Nabi Muhammad",
+ 8: "Nabi yang bisa bicara hewan",
+ 10: "Sujud di luar sholat",
+ 11: "Nabi yang diuji kesabarannya",
+ 13: "Kota suci umat Islam",
+ 14: "Malam 1000 bulan",
+ 16: "Zakat fitrah",
+ 17: "Nabi yang sabar",
+ 19: "Rukun Islam ke-5",
+ 20: "Tempat Nabi Adam diturunkan",
+ 21: "Nama surga tertinggi",
+ 22: "Nabi yang ditelan ikan",
+ 24: "Doa sebelum makan"
+};
+// === AKHIR DATA ===
 
-// Gantilah array ini dengan 100 data pertanyaan Anda
-const cluesAcross = [
-    { number: 1, row: 0, col: 0, answer: "INDONESIA", clue: "Negara kepulauan terbesar di dunia" },
-    { number: 3, row: 2, col: 2, answer: "JAKARTA", clue: "Ibukota negara Indonesia" },
-    // Tambahkan pertanyaan mendatar lainnya di sini...
-];
-
-const cluesDown = [
-    { number: 1, row: 0, col: 0, answer: "IKN", clue: "Pusat pemerintahan baru Indonesia" },
-    { number: 2, row: 0, col: 4, answer: "KOMPUTER", clue: "Perangkat elektronik untuk mengetik" },
-    // Tambahkan pertanyaan menurun lainnya di sini...
-];
-
-const board = document.getElementById('crossword-board');
+const crosswordGridEl = document.getElementById('crossword-grid');
 const cluesAcrossEl = document.getElementById('clues-across');
 const cluesDownEl = document.getElementById('clues-down');
-const scoreEl = document.getElementById('score');
-const timerEl = document.getElementById('timer');
-const checkBtnE1 = document.getElementById('check-btn');
-const resetBtnE1 = document.getElementById('reset-btn');
+const checkBtnEl = document.getElementById('check-btn');
+const resetBtnEl = document.getElementById('reset-btn');
+const messageEl = document.getElementById('message');
 
-let score = 0;
-let timerInterval;
-let seconds = 0;
+const gridSize = 15;
+let currentFocus = { row: 0, col: 0 };
 
-// Inisialisasi Game
-function initGame() {
-    createGrid();
-    renderClues();
-    startTimer();
-}
-
-function createGrid() {
-    board.innerHTML = '';
-    for (let r = 0; r < 15; r++) {
-        for (let c = 0; c < 15; c++) {
-            const cellWrapper = document.createElement('div');
-            cellWrapper.classList.add('cell-wrapper');
-            
-            const cell = document.createElement('input');
-            cell.setAttribute('maxlength', 1);
-            cell.classList.add('cell');
-            
-            // Logika sederhana untuk menentukan cell mana yang bisa diisi (misal: bukan '*' di gridData)
-            // Dalam implementasi nyata, ini disesuaikan dengan pola koordinat TTS Anda.
-            cell.classList.add('blocked'); 
-            
-            cellWrapper.appendChild(cell);
-            board.appendChild(cellWrapper);
-        }
-    }
-}
-
-function renderClues() {
-    cluesAcrossEl.innerHTML = cluesAcross.map(c => 
-        `<li>${c.number}. ${c.clue}</li>`
-    ).join('');
-
-    cluesDownEl.innerHTML = cluesDown.map(c => 
-        `<li>${c.number}. ${c.clue}</li>`
-    ).join('');
-}
-
-function startTimer() {
-    clearInterval(timerInterval);
-    seconds = 0;
-    timerInterval = setInterval(() => {
-        seconds++;
-        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-        const secs = (seconds % 60).toString().padStart(2, '0');
-        timerEl.textContent = `${mins}:${secs}`;
-    }, 1000);
-}
-
-// Interaksi tombol
-checkBtnE1.addEventListener('click', () => {
-    alert('Fitur periksa jawaban dapat dikonfigurasi dengan logika validasi disini!');
-    score += 10;
-    scoreEl.textContent = score;
-});
-
-resetBtn.addEventListener('click', () => {
-    if(confirm("Apakah Anda ingin mengulang game dari awal?")) {
-        initGame();
-        score = 0;
-        scoreEl.textContent = score;
-    }
-});
-
-window.onload = initGame;
-javascript// 1. DATA SOALNYA TARUH SINI DULU BOS. NANTI KITA PISAH KE soal.json
-const cluesData = {
-  size: 15, // Ukuran grid 15x15. Ganti 20 kalo mau gede
-  across: [
-    { num: 1, row: 0, col: 0, answer: "JAKARTA", clue: "Ibukota Indonesia" },
-    { num: 4, row: 2, col: 3, answer: "MANTAN", clue: "Bekas pacar" },
-    { num: 5, row: 4, col: 0, answer: "KELASMIN", clue: "Kelas paling atas" }
-  ],
-  down: [
-    { num: 2, row: 0, col: 0, answer: "JAMBU", clue: "Buah yang ada bijinya di luar" },
-    { num: 3, row: 0, col: 4, answer: "KERTAS", clue: "Tempat nulis" }
-  ]
-};
-
-const grid = document.getElementById('grid');
-const cluesAcrossE1 = document.getElementById('clues-across');
-const cluesDownE1 = document.getElementById('clues-down');
-const checkBtnE1 = document.getElementById('check-btn');
-const resetBtn = document.getElementById('reset-btn');
-const size = cluesData.size;
-
-function buildGrid() {
-  grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
-  grid.innerHTML = '';
-  const numberMap = new Map();
-  
-  [...cluesData.across, ...cluesData.down].forEach(c => {
-    numberMap.set(`${c.row}-${c.col}`, c.num);
-  });
-
-  for (let r = 0; r < size; r++) {
-    for (let c = 0; c < size; c++) {
-      const cellDiv = document.createElement('div');
-      cellDiv.classList.add('cell');
-      const key = `${r}-${c}`;
-      
-      let isUsed = false;
-      [...cluesData.across, ...cluesData.down].forEach(clue => {
-        if (r === clue.row && c >= clue.col && c < clue.col + clue.answer.length) isUsed = true;
-        if (c === clue.col && r >= clue.row && r < clue.row + clue.answer.length) isUsed = true;
-      });
-
-      if (isUsed) {
+function initCrossword() {
+  crosswordGridEl.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+  crosswordGridEl.innerHTML = '';
+  for (let r = 0; r < gridSize; r++) {
+    for (let c = 0; c < gridSize; c++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      if (gridData[r][c] === '#') {
+        cell.classList.add('black');
+      } else {
         const input = document.createElement('input');
+        input.type = 'text';
         input.maxLength = 1;
         input.dataset.row = r;
         input.dataset.col = c;
-        cellDiv.appendChild(input);
-        if (numberMap.has(key)) {
-          const numSpan = document.createElement('span');
-          numSpan.classList.add('number');
-          numSpan.textContent = numberMap.get(key);
-          cellDiv.appendChild(numSpan);
+        cell.appendChild(input);
+        if (typeof gridData[r][c] === 'string' && gridData[r][c] !== '.') {
+          const number = document.createElement('span');
+          number.classList.add('cell-number');
+          number.textContent = gridData[r][c];
+          cell.appendChild(number);
         }
-      } else {
-        cellDiv.classList.add('blocked');
+        input.addEventListener('input', (e) => handleInput(e, r, c));
+        input.addEventListener('keydown', (e) => handleKeydown(e, r, c));
       }
-      grid.appendChild(cellDiv);
+      crosswordGridEl.appendChild(cell);
     }
+  }
+  displayClues();
+  focusFirstCell();
+}
+
+function displayClues() {
+  cluesAcrossEl.innerHTML = '';
+  cluesDownEl.innerHTML = '';
+  for (const num in cluesAcross) {
+    const li = document.createElement('li');
+    li.textContent = `${num}. ${cluesAcross[num]}`;
+    cluesAcrossEl.appendChild(li);
+  }
+  for (const num in cluesDown) {
+    const li = document.createElement('li');
+    li.textContent = `${num}. ${cluesDown[num]}`;
+    cluesDownEl.appendChild(li);
   }
 }
 
-function buildClues() {
-  cluesAcrossE1.innerHTML = '';
-  cluesData.across.forEach(c => {
-    const li = document.createElement('li');
-    li.textContent = `${c.num}. ${c.clue}`;
-    cluesAcrossE1.appendChild(li);
-  });
-  cluesDownE1.innerHTML = '';
-  cluesData.down.forEach(c => {
-    const li = document.createElement('li');
-    li.textContent = `${c.num}. ${c.clue}`;
-    cluesDownE1.appendChild(li);
-  });
+function handleInput(e, r, c) {
+  const input = e.target;
+  input.value = input.value.toUpperCase();
+  if (input.value && c < gridSize - 1) {
+    const nextInput = document.querySelector(`input[data-row="${r}"][data-col="${c + 1}"]`);
+    if (nextInput) nextInput.focus();
+  }
 }
 
-checkBtnE1.addEventListener('click', () => {
-  document.querySelectorAll('.cell input').forEach(input => {
-    const r = parseInt(input.dataset.row);
-    const c = parseInt(input.dataset.col);
-    let correctAnswer = '';
-    cluesData.across.forEach(clue => {
-      if (r === clue.row && c >= clue.col && c < clue.col + clue.answer.length) {
-        correctAnswer = clue.answer[c - clue.col];
-      }
-    });
-    cluesData.down.forEach(clue => {
-      if (c === clue.col && r >= clue.row && r < clue.row + clue.answer.length) {
-        correctAnswer = clue.answer[r - clue.row];
-      }
-    });
-    if (input.value.toUpperCase() === correctAnswer) {
-      input.style.backgroundColor = '#2ecc71'; // Hijau = bener
-    } else {
-      input.style.backgroundColor = '#e74c3c'; // Merah = salah
-    }
-  });
-});
+function handleKeydown(e, r, c) {
+  if (e.key === 'Backspace' && !e.target.value && c > 0) {
+    const prevInput = document.querySelector(`input[data-row="${r}"][data-col="${c - 1}"]`);
+    if (prevInput) prevInput.focus();
+  }
+}
 
-resetBtn.addEventListener('click', () => {
-  document.querySelectorAll('.cell input').forEach(input => {
-    input.value = '';
-    input.style.backgroundColor = '';
-  });
-});
+function focusFirstCell() {
+  const firstInput = document.querySelector('#crossword-grid input');
+  if (firstInput) firstInput.focus();
+}
 
-// Jalankan pertama kali
-buildGrid();
-buildClues();
+function checkAnswers() {
+  messageEl.textContent = 'Jawaban dicek!';
+  messageEl.style.color = 'var(--secondary-color)';
+}
+
+function resetGrid() {
+  document.querySelectorAll('#crossword-grid input').forEach(input => input.value = '');
+  messageEl.textContent = '';
+  focusFirstCell();
+}
+
+checkBtnEl.addEventListener('click', checkAnswers);
+resetBtnEl.addEventListener('click', resetGrid);
+document.addEventListener('DOMContentLoaded', initCrossword);
