@@ -178,7 +178,7 @@ header {
 }
 
 /* Biar huryf di kotak TTS jadi putih*/
-input[type="cell"]  {
+.ceel input {
     color: white !important;
     background: transparent;
     border: none;
@@ -187,5 +187,9 @@ input[type="cell"]  {
     text-align: center;
     font-size: 20px;
     font-transform: uppercase;
-    caret-color: with!important;
+}
+input.cell {
+    color: white !important;
+    caret-color: white!important;
+
 }
