@@ -34,8 +34,8 @@ const cluesAcrossEl = document.getElementById('clues-across');
 const cluesDownEl = document.getElementById('clues-down');
 const scoreEl = document.getElementById('score');
 const timerEl = document.getElementById('timer');
-const checkBtn = document.getElementById('check-btn');
-const resetBtn = document.getElementById('reset-btn');
+const checkBtnE1 = document.getElementById('check-btn');
+const resetBtnE1 = document.getElementById('reset-btn');
 
 let score = 0;
 let timerInterval;
@@ -91,7 +91,7 @@ function startTimer() {
 }
 
 // Interaksi tombol
-checkBtn.addEventListener('click', () => {
+checkBtnE1.addEventListener('click', () => {
     alert('Fitur periksa jawaban dapat dikonfigurasi dengan logika validasi disini!');
     score += 10;
     scoreEl.textContent = score;
@@ -123,7 +123,7 @@ const cluesData = {
 const grid = document.getElementById('grid');
 const cluesAcrossE1 = document.getElementById('clues-across');
 const cluesDownE1 = document.getElementById('clues-down');
-const checkBtn = document.getElementById('check-btn');
+const checkBtnE1 = document.getElementById('check-btn');
 const resetBtn = document.getElementById('reset-btn');
 const size = cluesData.size;
 
@@ -183,7 +183,7 @@ function buildClues() {
   });
 }
 
-checkBtn.addEventListener('click', () => {
+checkBtnE1.addEventListener('click', () => {
   document.querySelectorAll('.cell input').forEach(input => {
     const r = parseInt(input.dataset.row);
     const c = parseInt(input.dataset.col);
